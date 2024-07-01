@@ -57,12 +57,14 @@ jobs:
           name: static-site
 
       - name: Unzip artifact for deployment
-        run: unzip -q release.zip -d .
+        run: unzip release.zip
 
       - name: List files for debugging
         run: |
           echo "Listing contents of current directory after unzip"
           ls -al
+          echo "Listing contents of build directory after unzip"
+          ls -al build
 
       - name: Login to Azure
         run: |
@@ -71,7 +73,7 @@ jobs:
       - name: Deploy to Azure Web App
         run: |
           echo "Deploying to Azure Web App"
-          az webapp deploy --resource-group raspiwebapp_group --name RaspiWebApp --src-path ./build --type static
+          az webapp deploy --resource-group raspiwebapp_group --name RaspiWebApp --src-path build --type static
 
       - name: Tail Application Logs
         run: |
