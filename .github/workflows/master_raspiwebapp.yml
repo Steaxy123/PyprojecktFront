@@ -74,4 +74,11 @@ jobs:
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_7A6B2C75B3C041B6B597EB56A96F6CD2 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_5187B2C8C774431E91757D0919E46181 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_00B77C824728425FA0FFF0FB7C
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_00B77C824728425FA0FFF0FB7CDA6C1C }}
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'RaspiWebApp'
+          package: .
