@@ -76,10 +76,18 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_5187B2C8C774431E91757D0919E46181 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_00B77C824728425FA0FFF0FB7CDA6C1C }}
 
+      - name: Clean target path
+        run: |
+          az webapp deployment source config-zip \
+            --resource-group YOUR_RESOURCE_GROUP \
+            --name RaspiWebApp \
+            --src release.zip \
+            --clean true
+
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'RaspiWebApp'
-          package: build
+          package: release.zip
           clean: true
