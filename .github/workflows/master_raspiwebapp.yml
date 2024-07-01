@@ -66,9 +66,7 @@ jobs:
 
 
       - name: Deploy to Azure Web App
-        run: |
-          az webapp deployment source config-zip --resource-group raspiwebapp_group --name RaspiWebApp --src release.zip
+        run: az webapp deploy --resource-group raspiwebapp_group --name RaspiWebApp --src-path build --type static
 
       - name: Tail Application Logs
-        run: |
-          az webapp log tail --name RaspiWebApp --resource-group raspiwebapp_group
+        run: az webapp log tail --name RaspiWebApp --resource-group raspiwebapp_group
