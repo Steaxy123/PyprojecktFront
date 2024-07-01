@@ -41,7 +41,7 @@ jobs:
         run: npm run test --if-present
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+        run: zip -r release.zip dist
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -66,16 +66,12 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
+      - name: List files for debugging
+        run: ls -al
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_7A6B2C75B3C041B6B597EB56A96F6CD2 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_5187B2C8C774431E91757D0919E46181 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_00B77C824728425FA0FFF0FB7CDA6C1C }}
-
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: 'RaspiWebApp'
-          package: release.zip
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_00B77C824728425FA0FFF0FB7C
