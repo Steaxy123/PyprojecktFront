@@ -38,10 +38,10 @@ jobs:
         run: npm run build
 
       - name: Verify build output
-        run: ls -al dist
+        run: ls -al build
 
       - name: Zip artifact for deployment
-        run: zip -r release.zip dist
+        run: zip -r release.zip build
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -67,7 +67,7 @@ jobs:
         run: unzip release.zip
 
       - name: List files for debugging
-        run: ls -al
+        run: ls -al build
 
       - name: Login to Azure
         uses: azure/login@v2
