@@ -73,22 +73,23 @@ jobs:
         run: ls -al build
 
       - name: Login to Azure
-        run: |
-          az login --service-principal -u "41aed552-942e-4e2b-984a-e9207b0fd89d" -p "ubn8Q~AMTTvcdi~Xkli9WBIwDzgeGNhINFa.3cme" --tenant "5e98bbb4-4a0c-4dae-8254-dcaa73b41da8"
-
+        uses: azure/login@v1
+        with:
+          client-id: "41aed552-942e-4e2b-984a-e9207b0fd89d"
+          tenant-id: "5e98bbb4-4a0c-4dae-8254-dcaa73b41da8"
+          client-secret: "ubn8Q~AMTTvcdi~Xkli9WBIwDzgeGNhINFa.3cme"
+          subscription-id: "a8176907-539a-4958-a597-fbf957efc766"
+      
       - name: Deploy to Azure Web App
-        run: |
-          az webapp deploy --resource-group raspiwebapp_group --name RaspiWebApp --src-path release.zip --type zip
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: RaspiWebApp
+          package: release.zip
 
-      - name: Check App Service Logs
+      - name: Set App Configuration
         run: |
-          curl -u "41aed552-942e-4e2b-984a-e9207b0fd89d:ubn8Q~AMTTvcdi~Xkli9WBIwDzgeGNhINFa.3cme" "https://RaspiWebApp.scm.azurewebsites.net/api/logs/docker"
-
-      - name: Start App in Production Mode
-        run: |
-          npm run start
-        env:
-          PORT: 8080
-
+          az webapp config appsettings set --resource-group raspiwebapp_group --name RaspiWebApp --settings PORT=8080
+          az webapp config set --resource-group raspiwebapp_group --name RaspiWebApp --startup-file "npm run start"
+      
       - name: Display environment variables
         run: printenv
