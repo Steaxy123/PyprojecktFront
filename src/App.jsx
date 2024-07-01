@@ -37,7 +37,7 @@ function App() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const corsAnywhere = 'https://cors-anywhere.herokuapp.com/';
+                const corsAnywhere = 'https://corsproxyserv.azurewebsites.net/';
                 const backendUrl = 'http://20.218.140.211:8000';
 
                 const clientIds = ["Sensor_Slave_1", "Sensor_Slave_2", "Lamp_Control_Slave"];
