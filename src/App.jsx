@@ -37,11 +37,9 @@ function App() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const proxyUrl = 'https://cors-proxy-server.azurewebsites.net/api/HttpTrigger1?code=QrKWwFtXQEKEa2cyt0THOumscPG32N51HtSopL0Bb1QpAzFuc8aRtA==';
                 const clientIds = ["Sensor_Slave_1","Sensor_Slave_2","Lamp_Control_Slave"];
-
                 const clientDataPromises = clientIds.map(id =>
-                    axios.get(`${proxyUrl}&url=http://20.218.140.211:8000/api/client/${id}`)
+                    axios.get(`http://20.218.140.211:8000/api/client/${id}`)
                 );
 
                 const responses = await Promise.all(clientDataPromises);
@@ -53,7 +51,7 @@ function App() {
                 setTempSensor3(responses[2].data.temp);
                 setFeuchtigkeitSensor3(responses[2].data.humidity);
 
-                const fanResponse = await axios.get(`${proxyUrl}&url=http://20.218.140.211:8000/api/cooling/fan`);
+                const fanResponse = await axios.get('http://20.218.140.211:8000/api/cooling/fan');
                 const pwm = fanResponse.data.speed;
                 if (pwm === 0){
                     setLuefter(0);
@@ -67,7 +65,7 @@ function App() {
                     setLuefter(100)
                 }
 
-                const gasResponse = await axios.get(`${proxyUrl}&url=http://20.218.140.211:8000/api/cooling/gas`);
+                const gasResponse = await axios.get('http://20.218.140.211:8000/api/cooling/gas');
                 setServo(gasResponse.data.open ? 180 : 0); // Assuming 180 for open and 0 for closed
             } catch (error) {
                 console.error('Fehler beim Abrufen der Daten:', error);
