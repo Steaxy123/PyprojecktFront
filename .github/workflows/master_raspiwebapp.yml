@@ -70,12 +70,13 @@ jobs:
         run: ls -al build
 
       - name: Login to Azure
-        uses: azure/login@v2
+        uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_7A6B2C75B3C041B6B597EB56A96F6CD2 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_5187B2C8C774431E91757D0919E46181 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_00B77C824728425FA0FFF0FB7CDA6C1C }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Deploy to Azure Web App using Azure CLI
         run: |
-          az webapp deployment source config-zip --resource-group YOUR_RESOURCE_GROUP --name RaspiWebApp --src release.zip
+          az webapp deploy --resource-group raspiwebapp_group --name RaspiWebApp --src-path release.zip
