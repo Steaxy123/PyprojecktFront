@@ -82,4 +82,13 @@ jobs:
 
       - name: Check App Service Logs
         run: |
-          curl -u \${{ secrets.AZURE_DEPLOY_USERNAME }}:\${{ secrets.AZURE_DEPLOY_PASSWORD }} "https://RaspiWebApp.scm.azurewebsites.net/api/logs/docker"
+          curl -u "41aed552-942e-4e2b-984a-e9207b0fd89d:ubn8Q~AMTTvcdi~Xkli9WBIwDzgeGNhINFa.3cme" "https://RaspiWebApp.scm.azurewebsites.net/api/logs/docker"
+
+      - name: Start App in Production Mode
+        run: |
+          npm run start
+        env:
+          PORT: 8080
+
+      - name: Display environment variables
+        run: printenv
