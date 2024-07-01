@@ -55,7 +55,7 @@ jobs:
           name: static-site
 
       - name: Unzip artifact for deployment
-        run: unzip release.zip
+        run: unzip -q release.zip -d build
 
       - name: List files for debugging
         run: ls -al build
@@ -63,7 +63,6 @@ jobs:
       - name: Login to Azure
         run: |
           az login --service-principal -u "41aed552-942e-4e2b-984a-e9207b0fd89d" -p "ubn8Q~AMTTvcdi~Xkli9WBIwDzgeGNhINFa.3cme" --tenant "5e98bbb4-4a0c-4dae-8254-dcaa73b41da8"
-
 
       - name: Deploy to Azure Web App
         run: az webapp deploy --resource-group raspiwebapp_group --name RaspiWebApp --src-path build --type static
