@@ -1,10 +1,11 @@
-name: Build and Deploy Static Site to Azure Web App
+name: Build and Deploy Node.js App to Azure
 
 on:
   push:
     branches:
       - master
   pull_request:
+    types: [opened, synchronize, reopened, closed]
     branches:
       - master
   workflow_dispatch:
@@ -14,8 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     name: Build Job
     steps:
-      - name: Check out the repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          lfs: false
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -25,21 +28,25 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
+      - name: Check Node.js version
+        run: node -v
+
+      - name: Check npm version
+        run: npm -v
+
       - name: Build the project
         run: npm run build
 
-      - name: Verify build output
-        run: |
-          echo "Listing build directory contents"
-          ls -al build
+      - name: Run Tests
+        run: npm run test --if-present
 
       - name: Zip artifact for deployment
-        run: zip -r release.zip build
+        run: zip release.zip ./* -r
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: static-site
+          name: node-app
           path: release.zip
 
   deploy:
@@ -48,34 +55,27 @@ jobs:
     environment:
       name: 'Production'
     permissions:
-      id-token: write
+      id-token: write # This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: static-site
+          name: node-app
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
-      - name: List files for debugging
-        run: |
-          echo "Listing contents of current directory after unzip"
-          ls -al
-          echo "Listing contents of build directory after unzip"
-          ls -al build
-
       - name: Login to Azure
-        run: |
-          az login --service-principal -u "41aed552-942e-4e2b-984a-e9207b0fd89d" -p "ubn8Q~AMTTvcdi~Xkli9WBIwDzgeGNhINFa.3cme" --tenant "5e98bbb4-4a0c-4dae-8254-dcaa73b41da8"
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_7A6B2C75B3C041B6B597EB56A96F6CD2 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_5187B2C8C774431E91757D0919E46181 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_00B77C824728425FA0FFF0FB7CDA6C1C }}
 
       - name: Deploy to Azure Web App
-        run: |
-          echo "Deploying to Azure Web App"
-          az webapp deploy --resource-group raspiwebapp_group --name RaspiWebApp --src-path build --type static
-
-      - name: Tail Application Logs
-        run: |
-          echo "Tailing application logs"
-          az webapp log tail --name RaspiWebApp --resource-group raspiwebapp_group
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'RaspiWebApp'
+          package: release.zip
