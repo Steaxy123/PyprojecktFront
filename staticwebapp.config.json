@@ -1,8 +1,7 @@
 {
   "routes": [
     {
-      "route": "/*",
-      "allowedRoles": ["anonymous"]
+      "route": "/*"
     }
   ],
   "navigationFallback": {
@@ -15,7 +14,7 @@
     }
   },
   "globalHeaders": {
-    "Content-Security-Policy": "default-src 'self'; img-src * data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://api.mapbox.com; style-src 'self' 'unsafe-inline' https://api.mapbox.com; connect-src 'self' http://20.218.140.211:8000 https://api.weatherapi.com https://api.mapbox.com; frame-src 'self'; worker-src 'self' blob:;",
+    "Content-Security-Policy": "default-src 'self' *; img-src * data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://api.mapbox.com; style-src 'self' 'unsafe-inline' https://api.mapbox.com; connect-src 'self' http://20.218.140.211:8000 https://api.weatherapi.com https://api.mapbox.com; frame-src 'self'; worker-src 'self' blob:;",
     "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload"
   }
 }
