@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "../untitled2/node_modules/.bin/vite",
-    "build": "../untitled2/node_modules/.bin/vite build",
-    "lint": "../untitled2/node_modules/.bin/eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "../untitled2/node_modules/.bin/vite preview"
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
