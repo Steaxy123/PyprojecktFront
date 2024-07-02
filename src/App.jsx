@@ -37,12 +37,11 @@ function App() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const corsAnywhere = 'https://corsproxyserv.azurewebsites.net/';
                 const backendUrl = 'http://20.218.140.211:8000';
 
                 const clientIds = ["Sensor_Slave_1", "Sensor_Slave_2", "Lamp_Control_Slave"];
                 const clientDataPromises = clientIds.map(id =>
-                    axios.get(`${corsAnywhere}${backendUrl}/api/client/${id}`)
+                    axios.get(`${backendUrl}/api/client/${id}`)
                 );
 
                 const responses = await Promise.all(clientDataPromises);
@@ -54,7 +53,7 @@ function App() {
                 setTempSensor3(responses[2].data.temp);
                 setFeuchtigkeitSensor3(responses[2].data.humidity);
 
-                const fanResponse = await axios.get(`${corsAnywhere}${backendUrl}/api/cooling/fan`);
+                const fanResponse = await axios.get(`${backendUrl}/api/cooling/fan`);
                 const pwm = fanResponse.data.speed;
                 if (pwm === 0) {
                     setLuefter(0);
@@ -68,7 +67,7 @@ function App() {
                     setLuefter(100)
                 }
 
-                const gasResponse = await axios.get(`${corsAnywhere}${backendUrl}/api/cooling/gas`);
+                const gasResponse = await axios.get(`${backendUrl}/api/cooling/gas`);
                 setServo(gasResponse.data.open ? 180 : 0); // Assuming 180 for open and 0 for closed
             } catch (error) {
                 console.error('Fehler beim Abrufen der Daten:', error);
